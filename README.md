@@ -1,4 +1,4 @@
-<img src="IPEvil2.png" alt="IP Evil Logo" width="200"/>
+<img src="IP-Sherlock.png" alt="IP Evil Logo" width="200"/>
 
 # IP Evil
 
