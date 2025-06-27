@@ -1,41 +1,71 @@
-<img src="IP-Sherlock.png" alt="IP Evil Logo" width="200"/>
+<p align="center">
+  <img src="assets/ipsherlock_banner.png" alt="IPSherlock Logo" width="600"/>
+</p>
 
-# IP Evil
+<h1 align="center">IP Sherlock</h1>
 
-IPEvil is an IP intelligence tool combining OSINT and WHOIS data to identify geolocation, network details, anonymity level, and ASN information. Supports JSON output, file saving, and multi-source analysis.</p>
+<p align="center">
+  <strong>IP Address Investigation and WHOIS Intelligence</strong>
+</p>
 
-[![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+<div align="center">
 
----
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-green)](https://opensource.org/licenses/Apache-2.0)
 
-## 👤 About Me
+</div>
 
-I'm a 16-year-old student from Italy with a strong interest in **Cybersecurity**, **Software Development**, and **Ethical Hacking**. I explore technology with curiosity and a focus on learning and responsibility.
+## Key Features
 
----
+- **Multi-Source Intelligence**
+- **Forensic Analysis**
+- **Privacy Protection**
+- **Multiple Output Formats**
+- **Enterprise Ready**
 
-## 🚀 Passions
+```bash
+pip install ipsherlock
+ipsherlock -ip 1.1.1.1 --json --file report.json
+```
 
-- **Cyber Security** – Understanding and securing systems.
-- **Software Development** – Writing useful and clean code.
-- **Ethical Hacking** – Learning how to break things to protect them.
+## ⚓ Virtual Environment
+Windows
+```bash
+python3 -m venv ipsherlock
+ipsherlock\Scripts\activate.bat
+```
+Linux
+```bash
+python3 -m venv ipsherlock
+source ipsherlock/bin/activate
+```
 
----
+## 📦 Installation
 
-## 🧠 Knowledge
+```bash
+git clone link
+cd ipsherlock
+python3 ipsherlock.py -h
+```
 
-- Programming fundamentals
-- Computer science basics
-- Ethical hacking principles
-- Networking and operating system fundamentals
+## 🪁 Usage
 
----
+```bash
+usage: ipsherlock [-h] -ip IPADDRESS [-n] [-g] [-s] [-w] [-c] [-j] [-f]
 
-## 🎯 Goals
+ip address investigation and whois intelligence
 
-- Deepen my cybersecurity expertise
-- Learn penetration testing methodologies
-- Build and share open-source tools
-- Inspire and help others to explore tech ethically
+options:
+  -h, --help            show this message
+  -ip, --ipaddress IPADDRESS
+                        get information from an ip address
+  -n, --network         get network information from an ip address
+  -g, --geolocation     get geolocation information from an ip address
+  -s, --security        get security information from an ip address
+  -w, --whois           get whois information from an ip address
+  -c, --category        divide the information by category
+  -j, --json            save the output to json format
+  -f, --file            save the output to a file
 
----
+use ethically and responsibly
+```
