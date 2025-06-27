@@ -15,18 +15,13 @@
 
 </div>
 
-## Key Features
+## 🚀 Key Features
 
-- **Multi-Source Intelligence**
-- **Forensic Analysis**
-- **Privacy Protection**
-- **Multiple Output Formats**
-- **Enterprise Ready**
-
-```bash
-pip install ipsherlock
-ipsherlock -ip 1.1.1.1 --json --file report.json
-```
+- Multi-Source Intelligence
+- Forensic Analysis
+- Privacy Protection
+- Multiple Output Formats
+- Enterprise Ready
 
 ## ⚓ Virtual Environment
 Windows
@@ -43,9 +38,9 @@ source ipsherlock/bin/activate
 ## 📦 Installation
 
 ```bash
-git clone link
-cd ipsherlock
-python3 ipsherlock.py -h
+git clone https://github.com/5a1r0x/IPSherlock.git
+cd IPSherlock
+python3 ipsherlock.py
 ```
 
 ## 🪁 Usage
