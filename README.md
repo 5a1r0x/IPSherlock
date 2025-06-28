@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/ipsherlock_banner.png" alt="IPSherlock Logo" width="600"/>
+  <img src="IPSherlock.png" alt="IPSherlock Logo" width="600"/>
 </p>
 
 <h1 align="center">IP Sherlock</h1>
