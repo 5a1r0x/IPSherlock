@@ -51,7 +51,7 @@ usage: ipsherlock [-h] -ip IPADDRESS [-n] [-g] [-s] [-w] [-c] [-j] [-f]
 ip address investigation and whois intelligence
 
 options:
-  -h, --help            show this message
+  -h, --help            show this message and exit
   -ip, --ipaddress IPADDRESS
                         get information from an ip address
   -n, --network         get network information from an ip address
@@ -59,7 +59,7 @@ options:
   -s, --security        get security information from an ip address
   -w, --whois           get whois information from an ip address
   -c, --category        divide the information by category
-  -j, --json            save the output to json format
+  -j, --json            save the output in json format
   -f, --file            save the output to a file
 
 use ethically and responsibly
