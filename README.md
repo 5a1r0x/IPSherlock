@@ -1,10 +1,3 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="IPSherlock.png">
-    <img src="assets/logo.png" width="500" style="border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.1);margin:20px 0" alt="Logo">
-  </picture>
-</p>
-
 <h1 align="center">IP Sherlock</h1>
 
 <p align="center">
