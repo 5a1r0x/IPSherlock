@@ -317,6 +317,7 @@ Other classifications:
             self.print_info("Events", results.get('events'))
         except Exception as e:
             self.print_error(f"WHOIS Lookup Failed: {str(e)}")
+            self.print_error("If you are on termux use the 'pkg install whois' command to install the integrated whois package\nwhois <IP Address>")
 
     def _generate_json_output(self):
         """Generate JSON output"""
