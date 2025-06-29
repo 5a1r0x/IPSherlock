@@ -47,7 +47,7 @@ python3 ipsherlock.py -h
 ## 🪁 Usage
 
 ```bash
-usage: ipsherlock [-h] [-ip IPADDRESS] [-m] [-n] [-g] [-s] [-w] [-c] [-j] [-f]
+usage: ipsherlock [-h] [-ip IPADDRESS] [-m] [-e] [-n] [-g] [-s] [-w] [-c] [-j] [-f]
 
 ip address investigation and whois intelligence
 
@@ -56,6 +56,7 @@ options:
   -ip, --ipaddress IPADDRESS
                         get information from an ip address
   -m, --myipaddress     get personal ip address
+  -e, --explanation     explanation of what a ip address is and how it works
   -n, --network         get network information from an ip address
   -g, --geolocation     get geolocation information from an ip address
   -s, --security        get security information from an ip address
