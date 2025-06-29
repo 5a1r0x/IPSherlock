@@ -41,20 +41,21 @@ source ipsherlock/bin/activate
 git clone https://github.com/5a1r0x/IPSherlock.git
 cd IPSherlock
 pip install -r requirements.txt
-python3 ipsherlock.py
+python3 ipsherlock.py -h
 ```
 
 ## 🪁 Usage
 
 ```bash
-usage: ipsherlock [-h] -ip IPADDRESS [-n] [-g] [-s] [-w] [-c] [-j] [-f]
+usage: ipsherlock [-h] [-ip IPADDRESS] [-m] [-n] [-g] [-s] [-w] [-c] [-j] [-f]
 
 ip address investigation and whois intelligence
 
 options:
-  -h, --help            show this message and exit
+  -h, --help            show this help message and exit
   -ip, --ipaddress IPADDRESS
                         get information from an ip address
+  -m, --myipaddress     get personal ip address
   -n, --network         get network information from an ip address
   -g, --geolocation     get geolocation information from an ip address
   -s, --security        get security information from an ip address
