@@ -36,7 +36,6 @@ source ipsherlock/bin/activate
 ```bash
 git clone https://github.com/5a1r0x/IPSherlock.git
 cd IPSherlock
-chmod +x ipsherlock.py
 pip install -r requirements.txt
 python3 ipsherlock.py -h
 ```
