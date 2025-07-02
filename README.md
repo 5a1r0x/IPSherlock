@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="IPSherlock.png" alt="Logo" width="500">
+</div>
+
 <h1 align="center">IP Sherlock</h1>
 
 <p align="center">
