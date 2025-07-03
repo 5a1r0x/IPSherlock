@@ -366,7 +366,6 @@ if __name__ == "__main__":
         epilog='use ethically and responsibly'
     )
 
-    parser.add_argument('-t', '--time', help='delay before sending the request to different apis', type=int, nargs=1)
     parser.add_argument('-ip', '--ipaddress', help='get information from an ip address', type=str, nargs=1)
     parser.add_argument('-m', '--myipaddress', help='get personal ip address', action='store_true')
     parser.add_argument('-n', '--network', help='get network information from an ip address', action='store_true')
@@ -376,6 +375,7 @@ if __name__ == "__main__":
     parser.add_argument('-c', '--category', help='divide the information by category', action='store_true')
     parser.add_argument('-j', '--json', help='save the output in json format', action='store_true')
     parser.add_argument('-f', '--file', help='save the output to a file', action='store_true')
+    parser.add_argument('-t', '--time', help='delay before sending the request to different apis', type=int, nargs=1)
 
     args = parser.parse_args()
 
