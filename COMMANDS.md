@@ -12,6 +12,7 @@
  - -c --category
  - -j --json
  - -f --file
+ - -t --time
 
 ## 🫧 Example
 Lists all IP information divided by category
