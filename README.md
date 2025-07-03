@@ -27,13 +27,13 @@
 ## ⚓ Virtual Environment
 Windows
 ```bash
-python3 -m venv ipsherlock
-ipsherlock\Scripts\activate.bat
+python3 -m venv sherlock
+sherlock\Scripts\activate.bat
 ```
 Linux
 ```bash
-python3 -m venv ipsherlock
-source ipsherlock/bin/activate
+python3 -m venv sherlock
+source sherlock/bin/activate
 ```
 
 ## 📦 Installation
