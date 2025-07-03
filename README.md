@@ -10,8 +10,9 @@
 
 <div align="center">
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green)](https://opensource.org/licenses/Apache-2.0)
+[![Python Version](https://img.shields.io/badge/Python-3.8%2B-yellow)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
+![Platform](https://img.shields.io/badge/Platform-Terminal%20%7C%20CLI-lightgrey.svg)
 
 </div>
 
