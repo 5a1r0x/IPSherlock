@@ -2,9 +2,9 @@
 
 """
 Name: IP Sherlock
-Version: 1.0
+Version: 1.1
 Developer: 5a1r0x
-GitHub: https://github.com/5a1r0x/IPSherlock
+GitHub: https://github.com/5a1r0x/IPSherlock.git
 License: Apache 2.0
 Powered by AI
 """
@@ -15,6 +15,7 @@ import ipaddress
 import secrets
 import socket
 import json
+import time
 
 try:
     import requests
@@ -27,7 +28,7 @@ except ModuleNotFoundError as m:
     if "requirements.txt" in files:
         os.system("pip install -r requirements.txt")
     else:
-        print(f"✗ Unable to install the necessary modules ({m}). Check the existence of the requirements.txt file and its contents.")
+        print(f"[ERROR] Unable to install the necessary modules ({m}). Check the existence of the requirements.txt file and its contents.")
 
 class IPSherlock:
     USER_AGENTS = [
@@ -60,6 +61,7 @@ class IPSherlock:
         self.arg = arg
         self.headers = self._generate_headers()
         self.ip = arg.ipaddress[0] if arg.ipaddress else None
+        self.delay = int(arg.time[0]) if hasattr(arg, 'time') and arg.time else 0
         self.data1 = None
         self.data2 = None
         self.data3 = None
@@ -98,11 +100,15 @@ class IPSherlock:
 
     @staticmethod
     def print_error(msg):
-        print(f"{Fore.RED} ✗ {msg}{Fore.RESET}")
+        print(f"{Fore.RED} [ERROR] {msg}{Fore.RESET}")
 
     @staticmethod
     def print_success(msg):
-        print(f"{Fore.GREEN} ✓ {msg}{Fore.RESET}")
+        print(f"{Fore.GREEN} [SUCCESS] {msg}{Fore.RESET}")
+
+    @staticmethod
+    def print_help(msg):
+        print(f"{Fore.YELLOW} [HELP] {msg}{Fore.RESET}")
 
     @staticmethod
     def clean_terminal():
@@ -111,22 +117,25 @@ class IPSherlock:
     def _fetch_ip_data(self):
         """Retrieve IP data from external APIs"""
         try:
+            time.sleep(self.delay)
             r1 = requests.get(
-                f"https://ipinfo.io/{self.ip}/json",
+                f"https://ipinfo.io/{self.ip}/json", # 1000 R/DAY
                 headers=self.headers,
                 stream=True,
                 timeout=10,
                 verify=True
             )
+            time.sleep(self.delay)
             r2 = requests.get(
-                f"https://ipwho.is/{self.ip}",
+                f"https://ipwho.is/{self.ip}", # FREE PLAN 10.000 R/MONTH
                 headers=self.headers,
                 stream=True,
                 timeout=10,
                 verify=True
             )
+            time.sleep(self.delay)
             r3 = requests.get(
-                f"https://proxycheck.io/v2/{self.ip}&vpn=1&asn=1&risk=1&node=1",
+                f"https://proxycheck.io/v2/{self.ip}&vpn=1&asn=1&risk=1&node=1", # 100 R/DAY
                 headers=self.headers,
                 stream=True,
                 timeout=10,
@@ -153,45 +162,11 @@ class IPSherlock:
         except json.JSONDecodeError:
             raise ValueError("Invalid JSON response from API")
 
-    @staticmethod
-    def _ip_explanation():
-        """IP Address Explanation"""
-        print("""What is an IP Address?
-An Internet Protocol Address (IP Address) is a unique numeric identifier assigned to each device connected to a network that uses the IP protocol for communication.
-
-What is it for?
-IP addresses perform three main functions:
-- Identification of devices: acts as a postal address for sending and receiving data packages
-- Routing: allows you to correctly direct data via the network to the target device
-- Bidirectional communication: allows the exchange of information between server and client
-
-How does it work?
-IPv4: uses 32 bits divided into 4 8-bit groups (eight), represented in decimal format (e.g. 192.168.1.1)
-IPv6: uses 128 bits divided into 8 16-bit groups, represented in hexadecimal format (e.g. 2001: 0db8: 85a3 :: 8a2e: 0370: 7334)
-DNS resolution process:
-The device contacts a DNS server which translates domain names (e.g. google.com) into IP addresses (e.g. 172.217.16.206), allowing connection to the desired website.
-
-Types of IP addresses
-IPv4:
-Format: 4 numeric groups from 0 to 255 (e.g. 192.168.1.1)
-Limit: approximately 4.3 billion addresses available
-Use: still widespread despite exhaustion
-
-IPv6:
-Format: 8 hexadecimal groups (e.g. 2001: 0db8: 85a3 :: 8a2e: 0370: 7334)
-Capacity: 3.4 × 10 ³⁸ available addresses
-Use: IPv4 exhaustion solution
-
-Other classifications:
-- Public: accessible from the Internet (e.g. 8.8.8.8)
-- Individuals: used in local networks (e.g. 10.0.0.1)
-- Dynamics: change periodically (assigned via DHCP)
-- Static: fixed and permanent
-- Loopback: used for local tests (e.g. 127.0.0.1)""")
-
     def _my_ip_address(self):
         """Get personal IP Address"""
+        time.sleep(self.delay)
         ipv4 = requests.get(url=f"https://ipinfo.io/json", headers=self.headers, stream=True, timeout=10, verify=True)
+        time.sleep(self.delay)
         ipv6 = requests.get(url=f"https://api.myip.com/", headers=self.headers, stream=True, timeout=10, verify=True)
         ip4 = ipv4.json()["ip"]
         ip6 = ipv6.json()["ip"]
@@ -317,7 +292,7 @@ Other classifications:
             self.print_info("Events", results.get('events'))
         except Exception as e:
             self.print_error(f"WHOIS Lookup Failed: {str(e)}")
-            self.print_error("If you are on termux use the 'pkg install whois' command to install the integrated whois package\nwhois <IP Address>")
+            self.print_help("If you are on termux use the 'pkg install whois' command to install the integrated whois package")
 
     def _generate_json_output(self):
         """Generate JSON output"""
@@ -332,7 +307,7 @@ Other classifications:
 
     def _save_to_file(self, content):
         """Save output to file"""
-        filename = f"IPEvil_{self.ip}.txt" if ":" not in self.ip else f"IPEvil_v6.txt"
+        filename = f"IPSherlock_{self.ip}.txt" if ":" not in self.ip else f"IPSherlock_IPv6.txt"
         try:
             with open(filename, "w", encoding='utf-8', errors='ignore') as f:
                 f.write(content)
@@ -349,12 +324,8 @@ Other classifications:
                 self._my_ip_address()
                 return
 
-            if self.arg.explanation:
-                self._ip_explanation()
-                return
-
             if not self.ip:
-                raise ValueError("No IP Address provided. Use -ip <address > or -m for your IP Address.")
+                raise ValueError("No IP Address provided. Use -ip <IP Address> or -m for your IP Address.")
 
             self._fetch_ip_data()
             ip_info = self._process_ip_info()
@@ -395,9 +366,9 @@ if __name__ == "__main__":
         epilog='use ethically and responsibly'
     )
 
+    parser.add_argument('-t', '--time', help='delay before sending the request to different apis', type=int, nargs=1)
     parser.add_argument('-ip', '--ipaddress', help='get information from an ip address', type=str, nargs=1)
     parser.add_argument('-m', '--myipaddress', help='get personal ip address', action='store_true')
-    parser.add_argument('-e', '--explanation', help='explanation of what a ip address is and how it works', action='store_true')
     parser.add_argument('-n', '--network', help='get network information from an ip address', action='store_true')
     parser.add_argument('-g', '--geolocation', help='get geolocation information from an ip address',action='store_true')
     parser.add_argument('-s', '--security', help='get security information from an ip address', action='store_true')
