@@ -1,6 +1,6 @@
 # Command Guide
 
-## 📋 List
+## 📜 List
 
  - -h --help
  - -ip --ipaddress IPADDRESS
@@ -14,8 +14,24 @@
  - -f --file
 
 ## 🫧 Example
-
-
-## 📜 Code of Conduct
-Be respectful and inclusive. We follow the [Contributor Covenant](https://www.contributor-covenant.org/).
-
+Lists all IP information divided by category
+```bash
+python3 ipsherlock.py -ip 1.1.1.1 -c
+```
+Get your IP address
+```bash
+python3 ipsherlock.py -m
+```
+Get only the information from the security category
+```bash
+python3 ipsherlock.py -ip 1.1.1.1 -s
+```
+View output in json format
+```bash
+python3 ipsherlock.py -ip 1.1.1.1 -j
+```
+Save the output (json format) to a file
+```bash
+python3 ipsherlock.py -ip 1.1.1.1 -f
+```
+File Output <br> IPv4: IPSherlock_IPv4Address.txt <br> IPv6: IPSherlock_IPv6.txt
