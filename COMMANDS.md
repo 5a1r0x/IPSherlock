@@ -1,38 +1,43 @@
-# Command Guide
+# 🫧 Command Guide
 
-## 📜 List
+## List
 
  - -h --help
  - -ip --ipaddress IPADDRESS
+ - -t --time TIME
  - -m --myipaddress
  - -n --network
  - -g --geolocation
  - -s --security
  - -w --whois
  - -c --category
+ - -a --abuseipdb
+ - -ci --criminalip
  - -j --json
  - -f --file
- - -t --time TIME
 
-## 🫧 Example
-Lists all IP information divided by category
+## Examples
+Show Help Message
 ```bash
-python3 ipsherlock.py -ip 1.1.1.1 -c
+python3 ipsherlock.py -h
 ```
-Get your IP address
+Get Personal IP Address
 ```bash
 python3 ipsherlock.py -m
 ```
-Get only the information from the security category
+Get IP Address Information From Just One Category
 ```bash
-python3 ipsherlock.py -ip 1.1.1.1 -s
+python3 ipsherlock.py -ip 1.1.1.1 -n
 ```
-View output in json format
+View Output In Json Format
 ```bash
 python3 ipsherlock.py -ip 1.1.1.1 -j
 ```
-Save the output (json format) to a file
+Save Output To A File
 ```bash
 python3 ipsherlock.py -ip 1.1.1.1 -f
 ```
-File Output <br> IPv4: IPSherlock_IPv4Address.txt <br> IPv6: IPSherlock_IPv6.txt
+Get IP Address Information From API With Category
+```bash
+python3 ipsherlock.py -ip 1.1.1.1 -ci -c
+```
