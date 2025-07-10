@@ -2,7 +2,7 @@
 
 """
 Name: IP Sherlock
-Version: 1.1
+Version: 1.1.0
 Developer: 5a1r0x
 GitHub: https://github.com/5a1r0x/IPSherlock
 License: Apache 2.0
