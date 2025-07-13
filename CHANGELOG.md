@@ -26,6 +26,7 @@
 - Help `messages` and `information`
 - Support for whois package in `termux`
 - Information in the `security` category
+- Phone `prefix` in `geolocation` category
 
 ### Fixed
 - `File` and `JSON` output
