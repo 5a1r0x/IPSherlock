@@ -17,27 +17,27 @@
  - -f --file
 
 ## Examples
-Show Help Message
+Show help message
 ```bash
 python3 ipsherlock.py -h
 ```
-Get Personal IP Address
+Get personal IP Address
 ```bash
 python3 ipsherlock.py -m
 ```
-Get IP Address Information From Just One Category
+Get IP Address information from just one category
 ```bash
 python3 ipsherlock.py -ip 1.1.1.1 -n
 ```
-View Output In Json Format
+View output in JSON format
 ```bash
 python3 ipsherlock.py -ip 1.1.1.1 -j
 ```
-Save Output To A File
+Save output to a file
 ```bash
 python3 ipsherlock.py -ip 1.1.1.1 -f
 ```
-Get IP Address Information From API With Category
+Get IP Address information from API with category
 ```bash
 python3 ipsherlock.py -ip 1.1.1.1 -ci -c
 ```
