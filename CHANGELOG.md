@@ -2,7 +2,7 @@
 
 ## [1.0] – 2025‑07‑03
 ### Added
-- Support for `IPv`4 and `IPv`6 addresses
+- Support for `IPv4` and `IPv6` addresses
 - Explicit dependencies present in the `requirements.txt` file
 - Display of information in `json` format, in the `terminal` and in `files`
 - Viewing information from different `categories`
