@@ -104,7 +104,7 @@ class IPSherlock:
             "Accept-Language": secrets.choice(["it-IT,it;q=0.9", "en-US,en;q=0.9", "fr-FR,fr;q=0.8"]),
             "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
-            "Referrer": secrets.choice(self.REFERRERS),
+            "Referer": secrets.choice(self.REFERRERS),
             "User-Agent": secrets.choice(self.USER_AGENTS),
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             "Sec-Fetch-Dest": "empty",
