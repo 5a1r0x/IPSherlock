@@ -2,7 +2,7 @@
 
 """
 Name: IP Sherlock
-Version: 1.1
+Version: 1.2
 Developer: 5a1r0x
 GitHub: https://github.com/5a1r0x/IPSherlock
 License: Apache 2.0
@@ -47,37 +47,64 @@ class IPSherlock:
         "Mozilla/5.0 (Linux; Android 14; SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36"
     ]
 
-    REFERERS = [
+    REFERRERS = [
         "https://www.google.com/",
         "https://www.bing.com/",
         "https://duckduckgo.com/",
-        "https://www.reddit.com/",
-        "https://github.com/",
-        "https://news.ycombinator.com/",
-        "https://stackoverflow.com/",
-        "https://medium.com/",
-        "https://twitter.com/"
     ]
 
     def __init__(self, arg):
         self.arg = arg
-        self.abuseipdbkey = os.getenv("ABUSEIPDB_API_KEY") # 1000 R/DAY (FREE TIER)
-        self.criminalipkey = os.getenv("CRIMINALIP_API_KEY") # 50 R/MONTH (FREE TIER)
+        self.abuseipdbkey = os.getenv('ABUSEIPDB_API_KEY') # 1000 R/DAY (FREE TIER)
+        self.criminalipkey = os.getenv('CRIMINALIP_API_KEY') # 50 R/MONTH (FREE TIER)
         self.headers = self._generate_headers()
         self.ip = arg.ipaddress[0] if arg.ipaddress else None
         self.delay = int(arg.time[0]) if hasattr(arg, 'time') and arg.time else 0
         self.data1 = None
         self.data2 = None
         self.data3 = None
+        self.data4 = None
         self.node = None
 
+    def _process_ip_info(self):
+        """Process the Main IP Information"""
+        ip_obj = ipaddress.ip_address(self.ip)
+        version = ip_obj.version
+        bit_length = ipaddress.IPV4LENGTH if version == 4 else ipaddress.IPV6LENGTH
+        byte_length = bit_length // 8
+
+        try:
+            host = socket.gethostbyaddr(self.ip)[0]
+        except socket.herror:
+            host = self.data1.get('hostname', 'Unknown')
+
+        privacy_levels = {
+            'PROXY': 'Low',
+            'VPN': 'Medium',
+            'RELAY': 'Medium',
+            'TOR': 'High',
+            'I2P': 'High',
+            'ANONYMIZER': 'High'
+        }
+        network_type = self.data3.get('type', '').upper()
+        anonymity = privacy_levels.get(network_type, 'Low')
+
+        return {
+            'ip_obj': ip_obj,
+            'version': version,
+            'bit_length': bit_length,
+            'byte_length': byte_length,
+            'host': host,
+            'anonymity': anonymity
+        }
+
     def _generate_headers(self):
-        """Generate random HTTP headers for requests"""
+        """Generate Random HTTP Headers For Requests"""
         return {
             "Accept-Language": secrets.choice(["it-IT,it;q=0.9", "en-US,en;q=0.9", "fr-FR,fr;q=0.8"]),
             "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
-            "Referer": secrets.choice(self.REFERERS),
+            "Referrer": secrets.choice(self.REFERRERS),
             "User-Agent": secrets.choice(self.USER_AGENTS),
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             "Sec-Fetch-Dest": "empty",
@@ -87,22 +114,20 @@ class IPSherlock:
             "Pragma": "no-cache"
         }
 
-    def _save_to_file(self, content):
+    def _save_to_file(self, title, content):
         """Save Output To File"""
-        print(" F I L E\n")
-        filename = f"IPSherlockIPv4.txt" if ":" not in self.ip else f"IPSherlockIPv6.txt"
+        filename = f"{title}IPv4.txt" if ":" not in self.ip else f"{title}IPv6.txt"
         try:
-            with open(filename, "w", encoding='utf-8', errors='ignore') as f:
+            with open(filename, 'w', encoding='utf-8', errors='ignore') as f:
                 f.write(str(content))
-            self.print_success(f"File Saved: {filename}")
+            self.print_help(f"File Saved: {filename}")
         except IOError as e:
             self.print_error(f"File Save Failed: {e}")
 
     def _save_to_json(self, content):
         """Save Output In Json Format"""
-        print(" J S O N\n")
         try:
-            print(str(json.dumps(content, indent=2)))
+            print("", str(json.dumps(content, indent=2)))
         except Exception as e:
             self.print_error(e)
 
@@ -114,23 +139,23 @@ class IPSherlock:
    | | | |__) | | (___ | |__   ___ _ __| | ___   ___| | __
    | | |  ___/   \___ \| '_ \ / _ \ '__| |/ _ \ / __| |/ /
   _| |_| |       ____) | | | |  __/ |  | | (_) | (__|   <
- |_____|_|      |_____/|_| |_|\___|_|  |_|\___/ \___|_|\_\ """)
+ |_____|_|      |_____/|_| |_|\___|_|  |_|\___/ \___|_|\_\
+ """)
 
     @staticmethod
     def print_info(label, value):
+        """Information Message"""
         print(f"{Fore.CYAN} {label}{Fore.CYAN}:{Fore.RESET} {value}{Fore.RESET}")
 
     @staticmethod
     def print_error(msg):
+        """Error Message"""
         print(f"{Fore.RED} [E] {msg}{Fore.RESET}")
 
     @staticmethod
-    def print_success(msg):
-        print(f"{Fore.GREEN} [S] {msg}{Fore.RESET}")
-
-    @staticmethod
     def print_help(msg):
-        print(f"{Fore.YELLOW} [I] {msg}{Fore.RESET}")
+        """Help Message"""
+        print(f"{Fore.CYAN} [I] {msg}{Fore.RESET}")
 
     @staticmethod
     def clean_terminal():
@@ -163,6 +188,14 @@ class IPSherlock:
                 timeout=10,
                 verify=True
             )
+            time.sleep(self.delay)
+            r4 = requests.get(
+                f"https://api.ipapi.is/?q={self.ip}",
+                headers=self.headers,
+                stream=True,
+                timeout=10,
+                verify=True
+            )
 
             if not all([r1.ok, r2.ok, r3.ok]):
                 errors = []
@@ -172,50 +205,53 @@ class IPSherlock:
                     errors.append(f"IpWho: {r2.status_code} | {r2.reason}")
                 if not r3.ok:
                     errors.append(f"ProxyCheck: {r3.status_code} | {r3.reason}")
+                if not r4.ok:
+                    errors.append(f"IpApi: {r4.status_code} | {r4.reason}")
                 raise ConnectionError("; ".join(errors))
 
             self.data1 = r1.json()
             self.data2 = r2.json()
             self.data3 = r3.json().get(self.ip, {})
-            self.node = r3.json().get("node", "Unknown")
+            self.data4 = r4.json()
+            self.node = r3.json().get('node', 'Unknown')
 
         # Exceptions
         except requests.exceptions.RequestException as e:
             raise ConnectionError(f"Network Error: {e}")
         except json.JSONDecodeError:
-            raise ValueError("Invalid JSON Response From API")
+            raise ValueError("Invalid JSON response from API")
 
     def _my_ip_address(self):
         """Personal IP Address"""
+        if self.arg.category:
+            print(f"\n\033[38;5;27m P E R S O N A L I P\n")
+
+        if self.arg.json or self.arg.file:
+            self.print_help("Parameters not available for this command\n")
+
         try:
             time.sleep(self.delay)
-            ipv4 = requests.get(url=f"https://ipinfo.io/json", headers=self.headers, stream=True, timeout=10,
+            ipv4 = requests.get(url=f"https://ipinfo.io/json", headers=self.headers,
+                                stream=True,
+                                timeout=10,
                                 verify=True)
 
             # Force IPv4
             ip4 = ipv4.json()
-            self.print_info('IPv4', ip4["ip"])
+            self.print_info('IPv4', ip4['ip'])
 
             time.sleep(self.delay)
-            ipv6 = requests.get(url=f"https://api6.myip.com/", headers=self.headers, stream=True, timeout=10,
+            ipv6 = requests.get(url=f"https://api6.myip.com/", headers=self.headers,
+                                stream=True,
+                                timeout=10,
                                 verify=True)
 
             ip6 = ipv6.json()
 
             ipaddress_information = {
-                'IPv4': ip4.get("ip", "Unknown"),
-                'IPv6': ip6.get("ip", "Unknown")
+                'IPv4': ip4.get('ip', 'Unknown'),
+                'IPv6': ip6.get('ip', 'Unknown')
             }
-
-            # File Output
-            if self.arg.file:
-                self._save_to_file(ipaddress_information)
-                return
-
-            # JSON Output
-            elif self.arg.json:
-                self._save_to_json(ipaddress_information)
-                return
 
             # Terminal Output
             for i, info in ipaddress_information.items():
@@ -223,41 +259,9 @@ class IPSherlock:
 
         # Exceptions
         except requests.exceptions.RequestException:
-            self.print_info("IPv6", "Unknown (No Connectivity)")
+            self.print_info('IPv6', "Unknown (No Connectivity)")
         except Exception as e:
             self.print_error(e)
-
-    def _process_ip_info(self):
-        """Process the main IP Information"""
-        ip_obj = ipaddress.ip_address(self.ip)
-        version = ip_obj.version
-        bit_length = ipaddress.IPV4LENGTH if version == 4 else ipaddress.IPV6LENGTH
-        byte_length = bit_length // 8
-
-        try:
-            host = socket.gethostbyaddr(self.ip)[0]
-        except socket.herror:
-            host = self.data1.get("hostname", "Unknown")
-
-        privacy_levels = {
-            'PROXY': 'Low',
-            'VPN': 'Medium',
-            'RELAY': 'Medium',
-            'TOR': 'High',
-            'I2P': 'High',
-            'ANONYMIZER': 'High'
-        }
-        network_type = self.data3.get("type", "").upper()
-        anonymity = privacy_levels.get(network_type, 'Low')
-
-        return {
-            "ip_obj": ip_obj,
-            "version": version,
-            "bit_length": bit_length,
-            "byte_length": byte_length,
-            "host": host,
-            "anonymity": anonymity
-        }
 
     def _display_network_info(self, ip_info):
         """Display Network Information"""
@@ -265,35 +269,35 @@ class IPSherlock:
             print(f"\n\033[38;5;27m N E T W O R K\n")
 
         try:
-            domain = self.data2.get("connection", {}).get("domain", "Unknown")
+            domain = self.data2.get('connection', {}).get('domain', 'Unknown')
             if domain == "" or not domain:
-                domain = "Unknown"
+                domain = 'Unknown'
 
             network_information = {
-                'IP Address': self.data1.get("ip", "Unknown"),
+                'IP Address': self.data1.get('ip', 'Unknown'),
                 'Name': 'Internet Protocol',
                 'Version': ip_info["version"],
                 'Bit': ip_info["bit_length"],
                 'Byte': ip_info["byte_length"],
                 'Interface': str(ipaddress.ip_interface(self.ip)),
-                'Private': "Yes" if ip_info["ip_obj"].is_private else "No",
-                'Link Local': "Yes" if ip_info["ip_obj"].is_link_local else "No",
-                'Global': "Yes" if ip_info["ip_obj"].is_global else "No",
-                'Local Host': "Yes" if ip_info["ip_obj"].is_loopback else "No",
-                'Multicast': "Yes" if ip_info["ip_obj"].is_multicast else "No",
-                'Reserved': "Yes" if ip_info["ip_obj"].is_reserved else "No",
-                'Unspecified': "Yes" if ip_info["ip_obj"].is_unspecified else "No",
+                'Private': 'No',
+                'Link Local': 'Yes' if ip_info["ip_obj"].is_link_local else 'No',
+                'Global': 'Yes' if ip_info["ip_obj"].is_global else 'No',
+                'Local Host': 'Yes' if ip_info["ip_obj"].is_loopback else 'No',
+                'Multicast': 'Yes' if ip_info["ip_obj"].is_multicast else 'No',
+                'Reserved': 'Yes' if ip_info["ip_obj"].is_reserved else 'No',
+                'Unspecified': 'Yes' if ip_info["ip_obj"].is_unspecified else 'No',
                 'Host': ip_info["host"],
                 'Domain': domain,
-                'Provider': self.data3.get("provider", "Unknown"),
-                'Organization': self.data1.get("org", "Unknown"),
-                'Device': self.data3.get("devices", {}).get("address", "Unknown"),
-                'Subnet': self.data3.get("devices", {}).get("subnet", "Unknown")
+                'Provider': self.data3.get("provider", 'Unknown'),
+                'Organization': self.data1.get("org", 'Unknown'),
+                'Device': self.data3.get('devices', {}).get('address', 'Unknown'),
+                'Subnet': self.data3.get('devices', {}).get('subnet', 'Unknown')
             }
 
             # File Output
             if self.arg.file:
-                self._save_to_file(network_information)
+                self._save_to_file('Network', network_information)
                 return
 
             # JSON Output
@@ -317,25 +321,27 @@ class IPSherlock:
             print(f"\n\033[38;5;27m G E O L O C A T I O N\n")
 
         try:
-            currency = self.data3.get("currency", {})
+            currency = self.data3.get('currency', {})
             currency_str = f"{currency.get('name', 'Unknown')} {currency.get('code', 'Unknown')} {currency.get('symbol', '')}"
 
             geolocation_information = {
-                'City': self.data1.get("city", "Unknown"),
-                'Region': self.data1.get("region", "Unknown"),
-                'Country': self.data3.get("country", "Unknown"),
-                'Continent': self.data3.get("continent", "Unknown"),
-                'ISO Code': self.data3.get("isocode", "Unknown"),
-                'Postal Code': self.data2.get("postal", "Unknown"),
-                'Current Time': self.data2.get("timezone", {}).get("current_time", "Unknown"),
-                'Latitude': self.data3.get("latitude", "Unknown"),
-                'Longitude': self.data3.get("longitude", "Unknown"),
-                'Currency': currency_str
+                'City': self.data1.get('city', 'Unknown'),
+                'Region': self.data1.get('region', 'Unknown'),
+                'Country': self.data3.get('country', 'Unknown'),
+                'Capital': self.data2.get('capital', 'Unknown'),
+                'Continent': self.data3.get('continent', 'Unknown'),
+                'ISO Code': self.data3.get('isocode', 'Unknown'),
+                'Postal Code': self.data2.get('postal', 'Unknown'),
+                'Current Time': self.data2.get('timezone', {}).get('current_time', 'Unknown'),
+                'Latitude': self.data3.get('latitude', 'Unknown'),
+                'Longitude': self.data3.get('longitude', 'Unknown'),
+                'Currency': currency_str,
+                'Phone Prefix': "+" + self.data2.get("calling_code", 'Unknown')
             }
 
             # File Output
             if self.arg.file:
-                self._save_to_file(geolocation_information)
+                self._save_to_file('Geolocation', geolocation_information)
                 return
 
             # JSON Output
@@ -361,14 +367,22 @@ class IPSherlock:
         try:
             security_information = {
                 'Node': self.node,
-                'Connection': self.data3.get("type", "Unknown"),
+                'Connection': self.data3.get('type', 'Unknown'),
                 'Anonimity': anonymity,
-                'Risk': self.data3.get("risk", "Unknown")
+                'Risk': self.data3.get('risk', 'Unknown'),
+                'Bogon': 'Yes' if self.data4.get('is_bogon', 'Unknown') else 'No',
+                'Mobile': 'Yes' if self.data4.get('is_mobile', 'Unknown') else 'No',
+                'Satellite': 'Yes' if self.data4.get('is_satellite', 'Unknown') else 'No',
+                'Crawler': 'Yes' if self.data4.get('is_crawler', 'Unknown') else 'No',
+                'Data Center': 'Yes' if self.data4.get('is_datacenter', 'Unknown') else 'No',
+                'Tor': 'Yes' if self.data4.get('is_tor', 'Unknown') else 'No',
+                'Proxy': 'Yes' if self.data4.get('is_proxy', 'Unknown') else 'No',
+                'Abuser': 'Yes' if self.data4.get('is_abuser', 'Unknown') else 'No'
             }
 
             # File Output
             if self.arg.file:
-                self._save_to_file(security_information)
+                self._save_to_file('Security',security_information)
                 return
 
             # JSON Output
@@ -414,7 +428,7 @@ class IPSherlock:
 
             # File Output
             if self.arg.file:
-                self._save_to_file(whois_information)
+                self._save_to_file('Whois', whois_information)
                 return
 
             # JSON Output
@@ -430,7 +444,7 @@ class IPSherlock:
         except requests.exceptions.RequestException as re:
             self.print_error(f"Network: {re}")
         except Exception as e:
-            self.print_error(f"WHOIS Lookup Failed: {e}")
+            self.print_error(f"WHOIS lookup failed: {e}")
             # Download 'whois' package for termux
             self.print_help("I'm trying to download the built-in 'whois' package...")
             try:
@@ -438,6 +452,38 @@ class IPSherlock:
                 self.print_help("Package 'whois' successfully installed. Use whois <IP Address>.")
             except Exception as e:
                 self.print_error(e)
+
+    def _private_ip_address(self):
+        """Private IP Address Information"""
+        if self.arg.category:
+            print(f"\n\033[38;5;27m P R I V A T E I P\n")
+
+        try:
+            private_information = {
+                'IP Address': self.ip,
+                'Name': 'Internet Protocol',
+                'Interface': str(ipaddress.ip_interface(self.ip)),
+                'Private': 'Yes'
+            }
+
+            # File Output
+            if self.arg.file:
+                self._save_to_file('Private', private_information)
+                return
+
+            # JSON Output
+            elif self.arg.json:
+                self._save_to_json(private_information)
+                return
+
+            # Terminal Output
+            for i, info in private_information.items():
+                self.print_info(f"{i}", f"{info}")
+
+        # Exception
+        except Exception as e:
+            self.print_error(e)
+
     def _abuse_ipdb_info(self):
         """(API) AbuseIPDB Information"""
         global abuse
@@ -451,7 +497,7 @@ class IPSherlock:
                 "Accept-Language": secrets.choice(["it-IT,it;q=0.9", "en-US,en;q=0.9", "fr-FR,fr;q=0.8"]),
                 "Accept-Encoding": "gzip, deflate",
                 "Connection": "keep-alive",
-                "Referer": secrets.choice(self.REFERERS),
+                "Referer": secrets.choice(self.REFERRERS),
                 "User-Agent": secrets.choice(self.USER_AGENTS),
                 "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
                 "Sec-Fetch-Dest": "empty",
@@ -469,18 +515,22 @@ class IPSherlock:
                 verify=True)
 
             ipdb = abuse.json()
-            print(ipdb)
+            print("", json.dumps(ipdb, indent=2))
 
             # File Output
             if self.arg.file:
-                self._save_to_file(ipdb)
+                self._save_to_file('AbuseIPDB', ipdb)
+
+            # JSON Output, Show Help Message
+            elif self.arg.json:
+                self.print_help("The output is already in JSON format")
 
         # Exceptions
         except requests.exceptions.RequestException as re:
             self.print_error(f"Request: {re}")
         except Exception as e:
             self.print_error(f"{e} | {abuse.status_code} {abuse.reason}")
-            self.print_help(f"Check your AbuseIPDB API Key in 'sherlockey.env' file. Check the status of the website.")
+            self.print_help(f"Check your AbuseIPDB API key in 'sherlockey.env' file. Check the status of the website.")
 
     def _criminal_ip_info(self):
         """(API) CriminalIP Information"""
@@ -495,7 +545,7 @@ class IPSherlock:
                 "Accept-Language": secrets.choice(["it-IT,it;q=0.9", "en-US,en;q=0.9", "fr-FR,fr;q=0.8"]),
                 "Accept-Encoding": "gzip, deflate",
                 "Connection": "keep-alive",
-                "Referer": secrets.choice(self.REFERERS),
+                "Referer": secrets.choice(self.REFERRERS),
                 "User-Agent": secrets.choice(self.USER_AGENTS),
                 "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
                 "Sec-Fetch-Dest": "empty",
@@ -513,22 +563,26 @@ class IPSherlock:
                 verify=True)
 
             if ":" in self.ip:
-                self.print_error("IPv6 Address Checking Not Available")
+                self.print_error("IPv6 Address checking not available")
                 return
 
             crimip = criminal.json()
-            print(crimip)
+            print("", json.dumps(crimip, indent=2))
 
             # File Output
             if self.arg.file:
-                self._save_to_file(crimip)
+                self._save_to_file('CriminalIP', crimip)
+
+            # JSON Output, Show Help Message
+            elif self.arg.json:
+                self.print_help("The output is already in JSON format")
 
         # Exceptions
         except requests.exceptions.RequestException as re:
             self.print_error(f"Request: {re}")
         except Exception as e:
             self.print_error(f"{e} | {criminal.status_code} {criminal.reason}")
-            self.print_help(f"Check your Criminal IP API Key in 'sherlockey.env' file. Check the status of the website.")
+            self.print_help(f"Check your Criminal IP API key in 'sherlockey.env' file. Check the status of the website.")
 
     def run(self):
         try:
@@ -538,6 +592,16 @@ class IPSherlock:
             # Personal IP Address
             if self.arg.myipaddress:
                 self._my_ip_address()
+                return
+
+            # Check if IP Address is provided
+            if not self.ip:
+                self.print_error("No IP Address provided. Use -ip <IP Address>.")
+                return
+
+            # Private IP Address
+            if ipaddress.ip_address(self.ip).is_private:
+                self._private_ip_address()
                 return
 
             # AbuseIPDB
@@ -561,7 +625,7 @@ class IPSherlock:
                 if self.arg.geolocation:
                     self._display_geolocation()
                 if self.arg.security:
-                    self._display_security_info(ip_info["anonymity"])
+                    self._display_security_info(ip_info['anonymity'])
                 if self.arg.whois:
                     self._display_whois_info()
                 if self.arg.myipaddress:
@@ -570,7 +634,7 @@ class IPSherlock:
             else:
                 self._display_network_info(ip_info)
                 self._display_geolocation()
-                self._display_security_info(ip_info["anonymity"])
+                self._display_security_info(ip_info['anonymity'])
                 self._display_whois_info()
 
         # Exception
