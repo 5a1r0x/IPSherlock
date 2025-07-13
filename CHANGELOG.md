@@ -2,10 +2,10 @@
 
 ## [1.0] – 2025‑07‑03
 ### Added
-- Support for IPv4 and IPv6 addresses
-- Explicit dependencies present in the requirements.txt file
-- Display of information in json format, in the terminal and in files
-- Viewing information from different categories
+- Support for `IPv`4 and `IPv`6 addresses
+- Explicit dependencies present in the `requirements.txt` file
+- Display of information in `json` format, in the `terminal` and in `files`
+- Viewing information from different `categories`
 
 ---
 
@@ -15,8 +15,21 @@
 - Added a `sherlockey.env` file for storing API keys
 
 ### Fixed
-- Error handling
-- Output in different formats
-- Code optimization
+- Error `handling`
+- Output in different `formats`
+- Code `optimization`
 
 ---
+## [1.2] – 2025‑07‑13
+### Added
+- Support for `IPApi` API and `private` IP Addresses
+- Help `messages` and `information`
+- Support for whois package in `termux`
+- Information in the `security` category
+
+### Fixed
+- `File` and `JSON` output
+- Error `handling`
+- `Compatibility` with IPv6 addresses
+- Grammatical `syntax` and `order`
+
