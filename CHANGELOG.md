@@ -33,3 +33,6 @@
 - `Compatibility` with IPv6 addresses
 - Grammatical `syntax` and `order`
 
+### Removed
+- Some useless `referrers` for http `requests`
+
