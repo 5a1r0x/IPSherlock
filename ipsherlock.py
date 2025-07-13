@@ -432,6 +432,7 @@ class IPSherlock:
         except Exception as e:
             self.print_error(f"WHOIS Lookup Failed: {e}")
             self.print_help("If you are on termux use the 'pkg install whois' command to install the integrated whois package")
+            os.system(f'pkg install whois && whois {self.ip}')
 
     def _abuse_ipdb_info(self):
         """(API) AbuseIPDB Information"""
