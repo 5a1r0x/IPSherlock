@@ -10,9 +10,9 @@ The `IPSherlock` software is provided exclusively for:
 ## Prohibited
 Do not use `IPSherlock` software for:
 
-❌ Obtain information secretly without authorization or for fun <br>
-❌ Unauthorized disclosure of information to offend someone <br>
-❌ Any illegal activity or for personal revenge
+❌ Obtain information secretly **without authorization** or for fun <br>
+❌ **Unauthorized** disclosure of information to offend someone <br>
+❌ Any **illegal activity** or for **personal revenge**
 
 ## Responsibility
 ⚖️ The developer is **not responsible** for **misuse**, **unauthorized disclosure** or **paid disclosure** <br>
@@ -20,6 +20,6 @@ Do not use `IPSherlock` software for:
 ⚖️ Use in **military** or **government** contexts requires **specific permission** <br>
 
 ## Ethics
-📢 Always respect local laws <br>
-📢 Do not collect personal data without consent <br>
-📢 Report improper or illicit use
+📢 Always respect **local laws** <br>
+📢 Do not collect **personal data** without consent <br>
+📢 **Report** improper or illicit use
