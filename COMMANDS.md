@@ -5,14 +5,18 @@
  - -h --help
  - -ip --ipaddress IPADDRESS
  - -t --time TIME
+ - -c --category
  - -m --myipaddress
  - -n --network
  - -g --geolocation
  - -s --security
  - -w --whois
- - -c --category
+ - -wd --whoisdb
  - -a --abuseipdb
  - -ci --criminalip
+ - -vt --virustotal
+ - -gn --greynoise
+ - -fk --fakeipaddress
  - -j --json
  - -f --file
 
@@ -40,4 +44,8 @@ python3 ipsherlock.py -ip 1.1.1.1 -f
 Get IP Address information from API with category
 ```bash
 python3 ipsherlock.py -ip 1.1.1.1 -ci -c
+```
+Generate fake IP Addresses
+```bash
+python3 ipsherlock.py -fk -c
 ```
