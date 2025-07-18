@@ -6,7 +6,7 @@ Version: 1.3
 Developer: 5a1r0x
 GitHub: https://github.com/5a1r0x/IPSherlock
 License: Apache 2.0
-Summer Edition (Green)
+Summer Edition
 Powered by AI
 """
 
