@@ -37,3 +37,21 @@
 ### Removed
 - Some useless `referrers` for http `requests`
 
+---
+## [1.3] – 2025‑07‑18
+### Added
+- Support for `WHOIS Global Database`, `VirusTotal` and `GreyNoise` APIs (Free Plan)
+- Random and automatic `generation` of `fake IP Addresses`
+- Comments for `code management` and `structure`
+- Information to the `security category`
+
+### Fixed
+- `Support` and `information messages`
+- Error `handling`
+- `Compatibility` with IPv6 addresses
+- Grammatical `syntax` and `order`
+
+### Removed
+- Some useless `header parameters` for http `requests`
+- `Node` from the `security category`
+
