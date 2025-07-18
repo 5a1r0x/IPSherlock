@@ -3,7 +3,6 @@
 </div>
 
 <h1 align="center">IP Sherlock</h1>
-<h3 align="center"><mark>Summer Edition</mark></h3>
 
 <p align="center">
   <strong>IP Address Investigation and WHOIS Intelligence</strong>
