@@ -6,6 +6,7 @@ Version: 1.3
 Developer: 5a1r0x
 GitHub: https://github.com/5a1r0x/IPSherlock
 License: Apache 2.0
+Summer Edition (Green)
 Powered by AI
 """
 
@@ -140,7 +141,7 @@ class IPSherlock:
 
     @staticmethod
     def logo():
-        print("\033[38;5;27m" + r"""
+        print("\033[38;5;2m" + r"""
   _____ _____     _____ _               _            _    
  |_   _|  __ \   / ____| |             | |          | |   
    | | | |__) | | (___ | |__   ___ _ __| | ___   ___| | __
@@ -152,7 +153,7 @@ class IPSherlock:
     @staticmethod
     def print_info(label, value):
         """Information Message"""
-        print(f"{Fore.CYAN} {label}{Fore.CYAN}:{Fore.RESET} {value}{Fore.RESET}")
+        print(f"{Fore.GREEN} {label}{Fore.GREEN}:{Fore.RESET} {value}{Fore.RESET}")
 
     @staticmethod
     def print_error(msg):
@@ -162,7 +163,7 @@ class IPSherlock:
     @staticmethod
     def print_help(msg):
         """Help Message"""
-        print(f"{Fore.CYAN} [I] {msg}{Fore.RESET}")
+        print(f"{Fore.GREEN} [I] {msg}{Fore.RESET}")
 
     @staticmethod
     def clean_terminal():
@@ -230,7 +231,7 @@ class IPSherlock:
     def _my_ip_address(self):
         """Personal IP Address"""
         if self.arg.category:
-            print(f"\n\033[38;5;27m P E R S O N A L I P\n")
+            print(f"\n\033[38;5;2m P E R S O N A L I P\n")
 
         try:
             time.sleep(self.delay)
@@ -269,7 +270,7 @@ class IPSherlock:
     def _display_network_info(self, ip_info):
         """Display network information"""
         if self.arg.category:
-            print(f"\n\033[38;5;27m N E T W O R K\n")
+            print(f"\n\033[38;5;2m N E T W O R K\n")
 
         try:
             # Try to get the domain from the API, otherwise check that it is not present or none
@@ -322,7 +323,7 @@ class IPSherlock:
     def _display_geolocation(self):
         """Display geolocation information"""
         if self.arg.category:
-            print(f"\n\033[38;5;27m G E O L O C A T I O N\n")
+            print(f"\n\033[38;5;2m G E O L O C A T I O N\n")
 
         try:
             # Try to get the currency from the API with his name, value and format
@@ -367,7 +368,7 @@ class IPSherlock:
     def _display_security_info(self, anonymity):
         """Display security information"""
         if self.arg.category:
-            print(f"\n\033[38;5;27m S E C U R I T Y\n")
+            print(f"\n\033[38;5;2m S E C U R I T Y\n")
 
         try:
             security_information = {
@@ -407,7 +408,7 @@ class IPSherlock:
     def _display_whois_info(self):
         """Display whois information"""
         if self.arg.category:
-            print(f"\n\033[38;5;27m W H O I S\n")
+            print(f"\n\033[38;5;2m W H O I S\n")
 
         try:
             obj = IPWhois(self.ip)
@@ -460,7 +461,7 @@ class IPSherlock:
     def _private_ip_address(self):
         """Private IP Address information"""
         if self.arg.category:
-            print(f"\n\033[38;5;27m P R I V A T E I P\n")
+            print(f"\n\033[38;5;2m P R I V A T E I P\n")
 
         try:
             private_information = {
@@ -493,7 +494,7 @@ class IPSherlock:
         global abuse
 
         if self.arg.category:
-            print(f"\n\033[38;5;27m A B U S E I P D B\n")
+            print(f"\n\033[38;5;2m A B U S E I P D B\n")
 
         self.print_help("Free Plan: 1000 Lookups/Day\n")
 
@@ -550,7 +551,7 @@ class IPSherlock:
         global criminal
 
         if self.arg.category:
-            print(f"\n\033[38;5;27m C R I M I N A L I P\n")
+            print(f"\n\033[38;5;2m C R I M I N A L I P\n")
 
         self.print_help("Free Plan: 50 Lookups/Month\n")
 
@@ -612,7 +613,7 @@ class IPSherlock:
         global virustotal
 
         if self.arg.category:
-            print(f"\n\033[38;5;27m V I R U S T O T A L\n")
+            print(f"\n\033[38;5;2m V I R U S T O T A L\n")
 
         self.print_help("Free Plan: 500 Lookups/Day\n")
 
@@ -669,7 +670,7 @@ class IPSherlock:
         global whoisdatabase
 
         if self.arg.category:
-            print(f"\n\033[38;5;27m W H O I S D A T A B A S E\n")
+            print(f"\n\033[38;5;2m W H O I S D A T A B A S E\n")
 
         try:
             ripedb_headers = {
@@ -726,7 +727,7 @@ class IPSherlock:
         global greynoise
 
         if self.arg.category:
-            print(f"\n\033[38;5;27m G R E Y N O I S E\n")
+            print(f"\n\033[38;5;2m G R E Y N O I S E\n")
 
         self.print_help("Free Plan: 25 Lookups/Time\n")
 
@@ -787,7 +788,7 @@ class IPSherlock:
         """Generate fake IP Addresses"""
 
         if self.arg.category:
-            print(f"\n\033[38;5;27m F A K E I P A D D R E S S\n")
+            print(f"\n\033[38;5;2m F A K E I P A D D R E S S\n")
 
         self.print_help('These IP addresses are fake and randomly generated\n')
 
