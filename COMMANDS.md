@@ -1,4 +1,4 @@
-# 🫧 Command Guide
+# 🍦 Command Guide
 
 ## List
 
