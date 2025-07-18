@@ -3,6 +3,7 @@
 </div>
 
 <h1 align="center">IP Sherlock</h1>
+<h3 align="center"><mark>Summer Edition</mark></h3>
 
 <p align="center">
   <strong>IP Address Investigation and WHOIS Intelligence</strong>
@@ -16,7 +17,7 @@
 
 </div>
 
-## 🔍 Key Features
+## 🔥 Key Features
 
 - Multi-Source Intelligence
 - Forensic Analysis
@@ -36,7 +37,7 @@ python3 -m venv sherlock
 source sherlock/bin/activate
 ```
 
-## 📦 Installation
+## 🐝 Installation
 
 ```bash
 git clone https://github.com/5a1r0x/IPSherlock.git
