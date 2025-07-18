@@ -6,13 +6,13 @@ Version: 1.3
 Developer: 5a1r0x
 GitHub: https://github.com/5a1r0x/IPSherlock
 License: Apache 2.0
-Summer Edition
+Summer Edition (Green)
 Powered by AI
 """
 
 import os
 import argparse
-from ipaddress import *
+import ipaddress
 import secrets
 import socket
 import json
