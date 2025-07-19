@@ -6,7 +6,7 @@ Version: 1.3
 Developer: 5a1r0x
 GitHub: https://github.com/5a1r0x/IPSherlock
 License: Apache 2.0
-Summer Edition (Green)
+Summer Edition
 Powered by AI
 """
 
@@ -668,12 +668,13 @@ class IPSherlock:
     def _global_database_info(self):
         """(API) IPApi global database information"""
         global whoisdatabase
+        global whoisdatabase_asn
 
         if self.arg.category:
             print(f"\n\033[38;5;2m W H O I S D A T A B A S E\n")
 
         try:
-            ripedb_headers = {
+            whoisdb_headers = {
                 "Accept-Language": secrets.choice(["it-IT,it;q=0.9", "en-US,en;q=0.9", "fr-FR,fr;q=0.8"]),
                 "Accept-Encoding": "gzip, deflate",
                 "Connection": "keep-alive",
@@ -691,7 +692,7 @@ class IPSherlock:
             time.sleep(self.delay)
             whoisdatabase_asn = requests.get(
                 f"https://api.ipapi.is/?q={self.ip}",
-                headers=ripedb_headers,
+                headers=whoisdb_headers,
                 timeout=10,
                 verify=True
             )
@@ -701,19 +702,19 @@ class IPSherlock:
             # Send a request to get the global database information with asn
             time.sleep(self.delay)
             whoisdatabase = requests.get(
-                f"https://api.ipapi.is/?whois=AS{as_result}",
-                headers=ripedb_headers,
+                f"https://api.ipapi.is/?whois=AS{asn_result}",
+                headers=whoisdb_headers,
                 timeout=10,
                 verify=True
             )
 
             # Print the result
-            rpdb = whoisdatabase.text
-            print(rpdb)
+            wdb = whoisdatabase.text
+            print(wdb)
 
             # File Output
             if self.arg.file:
-                self._save_to_file('WhoisDatabase', rpdb)
+                self._save_to_file('WhoisDatabase', wdb)
 
         # Exceptions
         except requests.exceptions.RequestException as re:
@@ -793,8 +794,8 @@ class IPSherlock:
         self.print_help('These IP addresses are fake and randomly generated\n')
 
         fake_ip = {
-            'IPv4': str(IPv4Address(random.getrandbits(32))),
-            'IPv6': str(IPv6Address(random.getrandbits(128)))
+            'IPv4': str(ipaddress.IPv4Address(random.getrandbits(32))),
+            'IPv6': str(ipaddress.IPv6Address(random.getrandbits(128)))
         }
 
         # Parameter to avoid errors during the saving of the file because ip is required
