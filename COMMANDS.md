@@ -12,7 +12,7 @@
  - -s --security
  - -w --whois
  - -wd --whoisdb
- - -a --abuseipdb
+ - -ab --abuseipdb
  - -ci --criminalip
  - -vt --virustotal
  - -gn --greynoise
