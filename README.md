@@ -16,7 +16,7 @@
 
 </div>
 
-## 🔥 Key Features
+## Key Features
 
 - Multi-Source Intelligence
 - Forensic Analysis
@@ -24,7 +24,7 @@
 - Multiple Output Formats
 - Enterprise Ready
 
-## ⚓ Virtual Environment
+## Virtual Environment
 Windows
 ```bash
 python3 -m venv sherlock
@@ -36,7 +36,7 @@ python3 -m venv sherlock
 source sherlock/bin/activate
 ```
 
-## 🐝 Installation
+## Installation
 
 ```bash
 git clone https://github.com/5a1r0x/IPSherlock.git
@@ -45,7 +45,7 @@ pip install -r requirements.txt
 python3 ipsherlock.py -h
 ```
 
-## 🪁 Usage
+## Usage
 
 ```bash
 usage: ipsherlock [-h] [-ip IPADDRESS] [-t TIME] [-c] [-m] [-n] [-g] [-s] [-w] [-wd] [-ab] [-ci] [-vt] [-gn] [-fk]
