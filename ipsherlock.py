@@ -2,11 +2,10 @@
 
 """
 Name: IP Sherlock
-Version: 1.3
+Version: 1.4
 Developer: 5a1r0x
 GitHub: https://github.com/5a1r0x/IPSherlock
 License: Apache 2.0
-Summer Edition
 Powered by AI
 """
 
@@ -23,7 +22,7 @@ try:
     import requests
     from ipwhois import IPWhois
     from dotenv import load_dotenv
-    load_dotenv("sherlockey.env")
+    load_dotenv('sherlockey.env')
     from colorama import init, Fore, Style
     init(autoreset=True)
 except ModuleNotFoundError as m:
@@ -61,6 +60,7 @@ class IPSherlock:
         self.criminalipkey = os.getenv('CRIMINALIP_API_KEY')
         self.virustotalkey = os.getenv('VIRUSTOTAL_API_KEY')
         self.graynoisekey = os.getenv('GREYNOISE_API_KEY')
+        self.ipregistrykey = os.getenv('IPREGISTRY_API_KEY')
         self.headers = self._generate_headers()
         self.ip = str(arg.ipaddress[0]) if hasattr(arg, 'ipaddress') and arg.ipaddress else None
         self.delay = int(arg.time[0]) if hasattr(arg, 'time') and arg.time else 0
@@ -92,7 +92,7 @@ class IPSherlock:
             'ANONYMIZER': 'High'
         }
 
-        # Network type (API) and anonimity
+        # Network type and anonimity
         network_type = self.data3.get('type', '').upper()
         anonymity = privacy_levels.get(network_type, 'Low')
 
@@ -114,7 +114,7 @@ class IPSherlock:
             "Connection": "keep-alive",
             "Referer": secrets.choice(self.REFERRERS),
             "User-Agent": secrets.choice(self.USER_AGENTS),
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8",
+            "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8",
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
@@ -127,10 +127,10 @@ class IPSherlock:
         filename = f"{title}IPv4.txt" if ":" not in self.ip else f"{title}IPv6.txt"
         try:
             with open(filename, 'w', encoding='utf-8', errors='ignore') as f:
-                f.write(str(content))
+                f.write(str(json.dumps(content, indent=2)))
             self.print_help(f"File Saved: {filename}")
         except IOError as e:
-            self.print_error(f"File Save Failed: {e}")
+            self.print_error(f"File Problem: {e}")
 
     def _save_to_json(self, content):
         """Save output in JSON format"""
@@ -173,30 +173,34 @@ class IPSherlock:
     def _fetch_ip_data(self):
         """Retrieve IP Data from free APIs"""
         try:
+            # IPInfo
             time.sleep(self.delay)
             r1 = requests.get(
-                f"https://ipinfo.io/{self.ip}/json",
+                url=f"https://ipinfo.io/{self.ip}/json",
                 headers=self.headers,
                 timeout=10,
                 verify=True
             )
+            # IPWhois
             time.sleep(self.delay)
             r2 = requests.get(
-                f"https://ipwho.is/{self.ip}",
+                url=f"https://ipwho.is/{self.ip}",
                 headers=self.headers,
                 timeout=10,
                 verify=True
             )
+            # ProxyCheck
             time.sleep(self.delay)
             r3 = requests.get(
-                f"https://proxycheck.io/v2/{self.ip}&vpn=1&asn=1&risk=1&node=1",
+                url=f"https://proxycheck.io/v2/{self.ip}&vpn=1&asn=1&risk=1&node=1",
                 headers=self.headers,
                 timeout=10,
                 verify=True
             )
+            # IPApi
             time.sleep(self.delay)
             r4 = requests.get(
-                f"https://api.ipapi.is/?q={self.ip}",
+                url=f"https://api.ipapi.is/?q={self.ip}",
                 headers=self.headers,
                 timeout=10,
                 verify=True
@@ -224,7 +228,7 @@ class IPSherlock:
 
         # Exceptions
         except requests.exceptions.RequestException as e:
-            raise ConnectionError(f'Network Error: {e}')
+            raise ConnectionError(f'Network: {e}')
         except json.JSONDecodeError:
             raise ValueError('Invalid JSON response from API')
 
@@ -235,10 +239,11 @@ class IPSherlock:
 
         try:
             time.sleep(self.delay)
-            ipv4 = requests.get(url=f"https://ipinfo.io/json", headers=self.headers,
-                                timeout=10,
-                                verify=True
-                                )
+            ipv4 = requests.get(
+                url=f"https://ipinfo.io/json", headers=self.headers,
+                timeout=10,
+                verify=True
+            )
 
             # Force the acquisition of the IPv4 Address
             ip4 = ipv4.json()
@@ -246,10 +251,11 @@ class IPSherlock:
 
             # IPv6 Address
             time.sleep(self.delay)
-            ipv6 = requests.get(url=f"https://v6.ident.me", headers=self.headers,
-                                timeout=10,
-                                verify=True
-                                )
+            ipv6 = requests.get(
+                url=f"https://v6.ident.me", headers=self.headers,
+                timeout=10,
+                verify=True
+            )
 
             # Response to the request in text format
             ip6 = ipv6.text
@@ -270,7 +276,7 @@ class IPSherlock:
     def _display_network_info(self, ip_info):
         """Display network information"""
         if self.arg.category:
-            print(f"\n\033[38;5;2m N E T W O R K\n")
+            print(f'\n\033[38;5;2m N E T W O R K\n')
 
         try:
             # Try to get the domain from the API, otherwise check that it is not present or none
@@ -329,6 +335,11 @@ class IPSherlock:
             # Try to get the currency from the API with his name, value and format
             currency = self.data3.get('currency', {})
             currency_str = f"{currency.get('name', 'Unknown')} {currency.get('code', 'Unknown')} {currency.get('symbol', '')}"
+            # Management of the symbol '+' for the telephone prefix
+            if self.data2.get('calling_code'):
+                pprefix = f"+{self.data2.get('calling_code')}"
+            else:
+                pprefix = 'Unknown'
 
             geolocation_information = {
                 'City': self.data1.get('city', 'Unknown'),
@@ -342,7 +353,7 @@ class IPSherlock:
                 'Latitude': self.data3.get('latitude', 'Unknown'),
                 'Longitude': self.data3.get('longitude', 'Unknown'),
                 'Currency': currency_str,
-                'Phone Prefix': "+" + self.data2.get('calling_code', 'Unknown')
+                'Phone Prefix': pprefix
             }
 
             # File Output
@@ -374,7 +385,7 @@ class IPSherlock:
             security_information = {
                 'Connection': self.data3.get('type', 'Unknown'),
                 'Anonimity': anonymity,
-                'Risk': self.data3.get('risk', 'Unknown'),
+                'Risk': self.data4.get('company', {}).get('abuser_score', 'Unknown'),
                 'Bogon': 'Yes' if self.data4.get('is_bogon', 'Unknown') else 'No',
                 'Mobile': 'Yes' if self.data4.get('is_mobile', 'Unknown') else 'No',
                 'Satellite': 'Yes' if self.data4.get('is_satellite', 'Unknown') else 'No',
@@ -382,7 +393,9 @@ class IPSherlock:
                 'Data Center': 'Yes' if self.data4.get('is_datacenter', 'Unknown') else 'No',
                 'Tor': 'Yes' if self.data4.get('is_tor', 'Unknown') else 'No',
                 'Proxy': 'Yes' if self.data4.get('is_proxy', 'Unknown') else 'No',
-                'Abuser': 'Yes' if self.data4.get('is_abuser', 'Unknown') else 'No'
+                'Abuser': 'Yes' if self.data4.get('is_abuser', 'Unknown') else 'No',
+                'VPN': 'Yes' if self.data4.get('is_vpn', 'Unknown') else 'No',
+                'Service': self.data4.get('vpn', {}).get('service', 'No'),
             }
 
             # File Output
@@ -419,6 +432,7 @@ class IPSherlock:
                 'ASN': results.get('asn'),
                 'ASN Description': results.get('asn_description'),
                 'ASN Country Code': results.get('asn_country_code'),
+                'RIR': self.data4.get('rir', 'Unknown'),
                 'Name': results.get('network', {}).get('name'),
                 'Handle': results.get('network', {}).get('handle'),
                 'Type': results.get('network', {}).get('type'),
@@ -426,9 +440,7 @@ class IPSherlock:
                 'Country': results.get('network', {}).get('country'),
                 'Start Address': results.get('network', {}).get('start_address'),
                 'End Address': results.get('network', {}).get('end_address'),
-                'Entities': results.get('entities'),
-                'Links': results.get('links'),
-                'Events': results.get('events')
+                'Entities': results.get('entities')
             }
 
             # File Output
@@ -450,13 +462,6 @@ class IPSherlock:
             self.print_error(f"Request: {re}")
         except Exception as e:
             self.print_error(f"WHOIS Lookup Failed: {e}")
-            # Download 'whois' package for termux
-            self.print_help("I'm trying to download the built-in 'whois' package...")
-            try:
-                os.system(f'pkg install whois')
-                self.print_help("Package 'whois' successfully installed. Use whois <IP Address>.")
-            except Exception as e:
-                self.print_error(e)
 
     def _private_ip_address(self):
         """Private IP Address information"""
@@ -496,8 +501,6 @@ class IPSherlock:
         if self.arg.category:
             print(f"\n\033[38;5;2m A B U S E I P D B\n")
 
-        self.print_help("Free Plan: 1000 Lookups/Day\n")
-
         try:
             abuse_headers = {
                 "Key": self.abuseipdbkey,
@@ -506,7 +509,7 @@ class IPSherlock:
                 "Connection": "keep-alive",
                 "Referer": secrets.choice(self.REFERRERS),
                 "User-Agent": secrets.choice(self.USER_AGENTS),
-                "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8",
+                "Accept": "application/json",
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
@@ -516,7 +519,7 @@ class IPSherlock:
 
             time.sleep(self.delay)
             abuse = requests.get(
-                f"https://api.abuseipdb.com/api/v2/check?ipAddress={self.ip}&maxAgeInDays=90",
+                url=f"https://api.abuseipdb.com/api/v2/check?ipAddress={self.ip}&maxAgeInDays=90",
                 headers=abuse_headers,
                 timeout=10,
                 verify=True
@@ -525,14 +528,14 @@ class IPSherlock:
             ipdb = abuse.json()
             print("", json.dumps(ipdb, indent=2))
 
-            # Check if the user has exceeded the maximum limit of allowed check
+            # Check if the user has exceeded the maximum limit of allowed lookups
             if abuse.status_code == 429:
-                self.print_error("Daily check exceeded")
+                self.print_error("Available lookups limit exceeded")
                 self.print_help("Request a new API key or upgrade your plan")
 
             # Check if the user is unauthorized
-            if abuse.status_code == 401:
-                self.print_error("Unauthorized")
+            elif abuse.status_code == 401:
+                self.print_error(f"Unauthorized")
                 self.print_help("Check or update your API key")
 
             # File Output
@@ -544,7 +547,7 @@ class IPSherlock:
             self.print_error(f"Request: {re}")
         except Exception as e:
             self.print_error(f"{e} | {abuse.status_code} {abuse.reason}")
-            self.print_help(f"Check your AbuseIPDB API key in 'sherlockey.env' file. Check the status of the website.")
+            self.print_help(f"Check your AbuseIPDB API key in 'sherlockey.env' file. Check the status of the website: https://www.abuseipdb.com/.")
 
     def _criminal_ip_info(self):
         """(API) CriminalIP information"""
@@ -552,8 +555,6 @@ class IPSherlock:
 
         if self.arg.category:
             print(f"\n\033[38;5;2m C R I M I N A L I P\n")
-
-        self.print_help("Free Plan: 50 Lookups/Month\n")
 
         try:
             criminal_headers = {
@@ -563,7 +564,7 @@ class IPSherlock:
                 "Connection": "keep-alive",
                 "Referer": secrets.choice(self.REFERRERS),
                 "User-Agent": secrets.choice(self.USER_AGENTS),
-                "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8",
+                "Accept": "application/json",
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
@@ -573,7 +574,7 @@ class IPSherlock:
 
             time.sleep(self.delay)
             criminal = requests.get(
-                f"https://api.criminalip.io/v1/asset/ip/report?ip={self.ip}&full=true",
+                url=f"https://api.criminalip.io/v1/asset/ip/report?ip={self.ip}&full=true",
                 headers=criminal_headers,
                 timeout=10,
                 verify=True
@@ -593,7 +594,7 @@ class IPSherlock:
                 self.print_help("Request a new API key or upgrade your plan")
 
             # Check if the user is unauthorized
-            if criminal.status_code == 401:
+            elif criminal.status_code == 401:
                 self.print_error("Unauthorized")
                 self.print_help("Check or update your API key")
 
@@ -606,7 +607,7 @@ class IPSherlock:
             self.print_error(f"Request: {re}")
         except Exception as e:
             self.print_error(f"{e} | {criminal.status_code} {criminal.reason}")
-            self.print_help(f"Check your Criminal IP API key in 'sherlockey.env' file. Check the status of the website.")
+            self.print_help(f"Check your CriminalIP API key in 'sherlockey.env' file. Check the status of the website: https://www.criminalip.io/.")
 
     def _virus_total_info(self):
         """(API) VirusTotal information"""
@@ -614,8 +615,6 @@ class IPSherlock:
 
         if self.arg.category:
             print(f"\n\033[38;5;2m V I R U S T O T A L\n")
-
-        self.print_help("Free Plan: 500 Lookups/Day\n")
 
         try:
             vt_headers = {
@@ -625,7 +624,7 @@ class IPSherlock:
                 "Connection": "keep-alive",
                 "Referer": secrets.choice(self.REFERRERS),
                 "User-Agent": secrets.choice(self.USER_AGENTS),
-                "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8",
+                "Accept": "application/json",
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
@@ -635,7 +634,7 @@ class IPSherlock:
 
             time.sleep(self.delay)
             virustotal = requests.get(
-                f"https://www.virustotal.com/api/v3/ip_addresses/{self.ip}",
+                url=f"https://www.virustotal.com/api/v3/ip_addresses/{self.ip}",
                 headers=vt_headers,
                 timeout=10,
                 verify=True
@@ -644,13 +643,13 @@ class IPSherlock:
             vtip = virustotal.json()
             print("", json.dumps(vtip, indent=2))
 
-            # Check if the user has exceeded the maximum lookups available
+            # Check if the user has exceeded the maximum limit of allowed lookups
             if virustotal.status_code == 429:
                 self.print_error("Available lookups limit exceeded")
                 self.print_help("Request a new API key or upgrade your plan")
 
             # Check if the user is unauthorized
-            if virustotal.status_code == 401:
+            elif virustotal.status_code == 401:
                 self.print_error("Unauthorized")
                 self.print_help("Check or update your API key")
 
@@ -663,7 +662,7 @@ class IPSherlock:
             self.print_error(f"Request: {re}")
         except Exception as e:
             self.print_error(f"{e} | {virustotal.status_code} {virustotal.reason}")
-            self.print_help(f"Check your VirusTotal API key in 'sherlockey.env' file. Check the status of the website.")
+            self.print_help(f"Check your VirusTotal API key in 'sherlockey.env' file. Check the status of the website: https://www.virustotal.com/.")
 
     def _global_database_info(self):
         """(API) IPApi global database information"""
@@ -680,7 +679,7 @@ class IPSherlock:
                 "Connection": "keep-alive",
                 "Referer": secrets.choice(self.REFERRERS),
                 "User-Agent": secrets.choice(self.USER_AGENTS),
-                "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8",
+                "Accept": "application/json",
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
@@ -691,7 +690,7 @@ class IPSherlock:
             # Send a request to get the asn
             time.sleep(self.delay)
             whoisdatabase_asn = requests.get(
-                f"https://api.ipapi.is/?q={self.ip}",
+                url=f"https://api.ipapi.is/?q={self.ip}",
                 headers=whoisdb_headers,
                 timeout=10,
                 verify=True
@@ -702,7 +701,7 @@ class IPSherlock:
             # Send a request to get the global database information with asn
             time.sleep(self.delay)
             whoisdatabase = requests.get(
-                f"https://api.ipapi.is/?whois=AS{asn_result}",
+                url=f"https://api.ipapi.is/?whois=AS{asn_result}",
                 headers=whoisdb_headers,
                 timeout=10,
                 verify=True
@@ -730,8 +729,6 @@ class IPSherlock:
         if self.arg.category:
             print(f"\n\033[38;5;2m G R E Y N O I S E\n")
 
-        self.print_help("Free Plan: 25 Lookups/Time\n")
-
         try:
             gndb_headers = {
                 "key": self.graynoisekey,
@@ -740,7 +737,7 @@ class IPSherlock:
                 "Connection": "keep-alive",
                 "Referer": secrets.choice(self.REFERRERS),
                 "User-Agent": secrets.choice(self.USER_AGENTS),
-                "Accept": "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8",
+                "Accept": "application/json",
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
@@ -750,7 +747,7 @@ class IPSherlock:
 
             time.sleep(self.delay)
             greynoise = requests.get(
-                f"https://api.greynoise.io/v3/community/{self.ip}",
+                url=f"https://api.greynoise.io/v3/community/{self.ip}",
                 headers=gndb_headers,
                 timeout=10,
                 verify=True
@@ -766,11 +763,11 @@ class IPSherlock:
 
             # Check if the user has exceeded the maximum limit of allowed lookups
             if greynoise.status_code == 429:
-                self.print_error("Maximum lookups exceeded")
+                self.print_error("Available lookups limit exceeded")
                 self.print_help("Request a new API key or upgrade your plan")
 
             # Check if the user is unauthorized
-            if greynoise.status_code == 401:
+            elif greynoise.status_code == 401:
                 self.print_error("Unauthorized")
                 self.print_help("Check or update your API key")
 
@@ -783,15 +780,67 @@ class IPSherlock:
             self.print_error(f"Request: {re}")
         except Exception as e:
             self.print_error(f"{e} | {greynoise.status_code} {greynoise.reason}")
-            self.print_help(f"Check your GreyNoise API key in 'sherlockey.env' file. Check the status of the website.")
+            self.print_help(f"Check your GreyNoise API key in 'sherlockey.env' file. Check the status of the website: https://www.greynoise.io/.")
+
+    def _ipregistry_ip_info(self):
+        """(API) IPRegistry IP information"""
+        global ipregistry
+
+        if self.arg.category:
+            print(f"\n\033[38;5;2m I P R E G I S T R Y\n")
+
+        try:
+            ipre_headers = {
+                "Accept-Language": secrets.choice(["it-IT,it;q=0.9", "en-US,en;q=0.9", "fr-FR,fr;q=0.8"]),
+                "Accept-Encoding": "gzip, deflate",
+                "Connection": "keep-alive",
+                "Referer": secrets.choice(self.REFERRERS),
+                "User-Agent": secrets.choice(self.USER_AGENTS),
+                "Accept": "application/json",
+                "Sec-Fetch-Dest": "empty",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin",
+                "Cache-Control": "no-cache",
+                "Pragma": "no-cache"
+            }
+
+            time.sleep(self.delay)
+            ipregistry = requests.get(
+                url=f"https://api.ipregistry.co/{self.ip}?hostname=true&key={self.ipregistrykey}",
+                headers=ipre_headers,
+                timeout=10,
+                verify=True
+            )
+
+            ipre = ipregistry.json()
+            print("", json.dumps(ipre, indent=2))
+
+            # Check if the user has exceeded the maximum limit of allowed lookups
+            if ipregistry.status_code == 429:
+                self.print_error("Available lookups limit exceeded")
+                self.print_help("Request a new API key or upgrade your plan")
+
+            # Check if the user is unauthorized
+            elif ipregistry.status_code == 401:
+                self.print_error("Unauthorized")
+                self.print_help("Check or update your API key")
+
+            # File Output
+            if self.arg.file:
+                self._save_to_file('IPRegistry', gndb)
+
+        # Exceptions
+        except requests.exceptions.RequestException as re:
+            self.print_error(f"Request: {re}")
+        except Exception as e:
+            self.print_error(f"{e} | {ipregistry.status_code} {ipregistry.reason}")
+            self.print_help(f"Check your IPRegistry API key in 'sherlockey.env' file. Check the status of the website: https://ipregistry.co/.")
 
     def _fakeipaddress_info(self):
         """Generate fake IP Addresses"""
 
         if self.arg.category:
-            print(f"\n\033[38;5;2m F A K E I P A D D R E S S\n")
-
-        self.print_help('These IP addresses are fake and randomly generated\n')
+            print(f"\n\033[38;5;2m F A K E I P\n")
 
         fake_ip = {
             'IPv4': str(ipaddress.IPv4Address(random.getrandbits(32))),
@@ -803,12 +852,12 @@ class IPSherlock:
 
         # File Output
         if self.arg.file:
-            self._save_to_file('FakeIPAddress', fake_ip)
+            self._save_to_file('FakeIPAddresses', fake_ip)
             return
 
         # JSON Output
         if self.arg.json:
-            print("", json.dumps(fake_ip, indent=2))
+            self._save_to_json(fake_ip)
             return
 
         # Terminal Output
@@ -820,58 +869,48 @@ class IPSherlock:
             self.clean_terminal()
             self.logo()
 
-            # Personal IP Address
-            if self.arg.myipaddress:
+            # Personal IP Addresses
+            if self.arg.myip:
                 self._my_ip_address()
                 return
 
-            # Fake IP Address
-            if self.arg.fakeipaddress:
+            # Fake IP Addresses
+            if self.arg.fakeip:
                 self._fakeipaddress_info()
                 return
 
-            # Check if IP Address is provided
+            # Check if an IP address is provided, otherwise show the help message
             if not self.ip:
                 self.print_error('No IP Address provided')
                 self.print_help('Use -ip <IP Address>')
                 return
 
             # Private IP Address
-            if ipaddress.ip_address(self.ip).is_private:
+            elif ipaddress.ip_address(self.ip).is_private:
                 self._private_ip_address()
                 return
 
-            # (API JSON) AbuseIPDB
-            if self.arg.abuseipdb:
-                self._abuse_ipdb_info()
-                return
+            # API
+            api_handlers = {
+                'abuseipdb': self._abuse_ipdb_info,
+                'criminalip': self._criminal_ip_info,
+                'virustotal': self._virus_total_info,
+                'whoisdb': self._global_database_info,
+                'greynoise': self._greynoise_ip_info,
+                'ipregistry': self._ipregistry_ip_info
+            }
 
-            # (API JSON) CriminalIP
-            if self.arg.criminalip:
-                self._criminal_ip_info()
-                return
-
-            # (API JSON) VirusTotal
-            if self.arg.virustotal:
-                self._virus_total_info()
-                return
-
-            # (WHOIS DATABASE) IpApi
-            if self.arg.whoisdb:
-                self._global_database_info()
-                return
-
-            # (API JSON) GreyNoise Community
-            if self.arg.greynoise:
-                self._greynoise_ip_info()
-                return
+            for flag, action in api_handlers.items():
+                if getattr(self.arg, flag, False):
+                    action()
+                    return
 
             # Process IP Information
             self._fetch_ip_data()
             ip_info = self._process_ip_info()
 
             # Display selected categories
-            if any([self.arg.network, self.arg.geolocation, self.arg.security, self.arg.whois, self.arg.myipaddress]):
+            if any([self.arg.network, self.arg.geolocation, self.arg.security, self.arg.whois, self.arg.myip]):
                 if self.arg.network:
                     self._display_network_info(ip_info)
                 if self.arg.geolocation:
@@ -880,7 +919,7 @@ class IPSherlock:
                     self._display_security_info(ip_info['anonymity'])
                 if self.arg.whois:
                     self._display_whois_info()
-                if self.arg.myipaddress:
+                if self.arg.myip:
                     self._my_ip_address()
             # Display all categories
             else:
@@ -905,19 +944,20 @@ if __name__ == "__main__":
     parser.add_argument('-ip', '--ipaddress', help='get information from an ip address', type=str, nargs=1)
     parser.add_argument('-t', '--time', help='delay before sending requests to apis', type=int, nargs=1)
     parser.add_argument('-c', '--category', help='divide the information by category', action='store_true')
-    parser.add_argument('-m', '--myipaddress', help='get personal ip addresses', action='store_true')
+    parser.add_argument('-m', '--myip', help='get personal ip addresses', action='store_true')
     parser.add_argument('-n', '--network', help='get network information', action='store_true')
     parser.add_argument('-g', '--geolocation', help='get geolocation information',action='store_true')
     parser.add_argument('-s', '--security', help='get security information', action='store_true')
     parser.add_argument('-w', '--whois', help='get whois information', action='store_true')
     parser.add_argument('-wd', '--whoisdb', help='get information from whois database', action='store_true')
     parser.add_argument('-ab', '--abuseipdb', help='get information from abuseipdb api', action='store_true')
-    parser.add_argument('-ci', '--criminalip', help='get information from criminalip api', action='store_true')
+    parser.add_argument('-cp', '--criminalip', help='get information from criminalip api', action='store_true')
     parser.add_argument('-vt', '--virustotal', help='get information from virustotal api', action='store_true')
     parser.add_argument('-gn', '--greynoise', help='get information from greynoise api', action='store_true')
-    parser.add_argument('-fk', '--fakeipaddress', help='get fake ip addresses', action='store_true')
+    parser.add_argument('-ir', '--ipregistry', help='get information from ipregistry api', action='store_true')
+    parser.add_argument('-fk', '--fakeip', help='get fake and random ip addresses', action='store_true')
     parser.add_argument('-j', '--json', help='save the output in json format', action='store_true')
-    parser.add_argument('-f', '--file', help='save the output to a file', action='store_true')
+    parser.add_argument('-f', '--file', help='save the output in a file', action='store_true')
 
     args = parser.parse_args()
 
