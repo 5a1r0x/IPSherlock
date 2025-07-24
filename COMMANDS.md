@@ -13,9 +13,10 @@
  - -w --whois
  - -wd --whoisdb
  - -ab --abuseipdb
- - -ci --criminalip
+ - -cp --criminalip
  - -vt --virustotal
  - -gn --greynoise
+ - -ir --ipregistry
  - -fk --fakeipaddress
  - -j --json
  - -f --file
