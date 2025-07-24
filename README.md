@@ -48,8 +48,7 @@ python3 ipsherlock.py -h
 ## Usage
 
 ```bash
-usage: ipsherlock [-h] [-ip IPADDRESS] [-t TIME] [-c] [-m] [-n] [-g] [-s] [-w] [-wd] [-ab] [-ci] [-vt] [-gn] [-fk]
-                  [-j] [-f]
+usage: ipsherlock [-h] [-ip IPADDRESS] [-t TIME] [-c] [-m] [-n] [-g] [-s] [-w] [-wd] [-ab] [-cp] [-vt] [-gn] [-ir] [-fk] [-j] [-f]
 
 ip address investigation and whois intelligence
 
@@ -59,19 +58,20 @@ options:
                         get information from an ip address
   -t, --time TIME       delay before sending requests to apis
   -c, --category        divide the information by category
-  -m, --myipaddress     get personal ip addresses
+  -m, --myip            get personal ip addresses
   -n, --network         get network information
   -g, --geolocation     get geolocation information
   -s, --security        get security information
   -w, --whois           get whois information
   -wd, --whoisdb        get information from whois database
   -ab, --abuseipdb      get information from abuseipdb api
-  -ci, --criminalip     get information from criminalip api
+  -cp, --criminalip     get information from criminalip api
   -vt, --virustotal     get information from virustotal api
   -gn, --greynoise      get information from greynoise api
-  -fk, --fakeipaddress  get fake ip addresses
+  -ir, --ipregistry     get information from ipregistry api
+  -fk, --fakeip         get fake and random ip addresses
   -j, --json            save the output in json format
-  -f, --file            save the output to a file
+  -f, --file            save the output in a file
 
 use ethically and responsibly
 ```
