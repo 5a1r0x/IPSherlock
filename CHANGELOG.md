@@ -55,3 +55,17 @@
 - Some useless `header parameters` for http `requests`
 - `Node` from the `security category`
 
+---
+## [1.4] – 2025‑07‑24
+### Added
+- Support for `IPRegistry` API
+- `VPN` and `Service` to the `security category`
+- `RIR` to the `whois category`
+
+### Fixed
+- `Risk` in `security category`
+- Error `handling`
+- Grammatical `syntax` and `order`
+
+### Removed
+- `Links` and `Events `from the `whois category`
