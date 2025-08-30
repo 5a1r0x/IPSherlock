@@ -27,20 +27,25 @@
 ## Virtual Environment
 Windows
 ```bash
-python3 -m venv sherlock
-sherlock\Scripts\activate.bat
+python3 -m venv sherlockvenvwindows
+sherlockvenvwindows\Scripts\activate.bat
 ```
 Linux
 ```bash
-python3 -m venv sherlock
-source sherlock/bin/activate
+python3 -m venv sherlockvenvlinux
+source sherlockvenvlinux/bin/activate
+```
+MacOS
+```bash
+python3 -m venv sherlockvenvmacos
+source sherlockvenvmacos/bin/activate
 ```
 
 ## Installation
 
 ```bash
 git clone https://github.com/5a1r0x/IPSherlock.git
-cd IPSherlock
+cd IPSherlock && cd sherlock
 pip install -r requirements.txt
 python3 ipsherlock.py -h
 ```
