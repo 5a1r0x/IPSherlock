@@ -52,18 +52,18 @@ IPSherlock
 ## Virtual Environment
 Windows
 ```bash
-python3 -m venv sherlockvenvwindows
-sherlockvenvwindows\Scripts\activate.bat
+python3 -m venv sherlockwindows
+sherlockwindows\Scripts\activate.bat
 ```
 Linux
 ```bash
-python3 -m venv sherlockvenvlinux
-source sherlockvenvlinux/bin/activate
+python3 -m venv sherlocklinux
+source sherlocklinux/bin/activate
 ```
 MacOS
 ```bash
-python3 -m venv sherlockvenvmacos
-source sherlockvenvmacos/bin/activate
+python3 -m venv sherlockmacos
+source sherlockmacos/bin/activate
 ```
 
 ## Installation
