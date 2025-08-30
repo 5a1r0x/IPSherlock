@@ -12,7 +12,7 @@
 
 [![Python Version](https://img.shields.io/badge/Python-3.8%2B-lightblue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![Interface](https://img.shields.io/badge/Platform-Terminal%20%7C%20CLI-darkblue.svg)
+![Interface](https://img.shields.io/badge/Interface-Terminal%20%7C%20CLI-darkblue.svg)
 
 </div>
 
