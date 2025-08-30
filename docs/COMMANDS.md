@@ -1,6 +1,6 @@
-# Command Guide
+# [#] Command Guide
 
-## List
+## [1.0] List
 
  - -h --help
  - -ip --ipaddress IPADDRESS
@@ -22,7 +22,7 @@
  - -j --json
  - -f --file
 
-## Examples
+## [2.0] Examples
 Show help message
 ```bash
 python3 ipsherlock.py -h
