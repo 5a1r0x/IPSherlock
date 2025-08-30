@@ -18,7 +18,8 @@
 
 ## Major Features
 ```plaintext
-• Multi-Source Intelligence
+• Multi Source Intelligence
+• Multi Platform
 • Forensic Analysis
 • Privacy Protection
 • Multiple Output Formats
