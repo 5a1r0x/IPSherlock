@@ -1,4 +1,4 @@
-# 🚨 Disclaimer
+# Disclaimer
 
 ## Permitted
 The `IPSherlock` software is provided exclusively for:
