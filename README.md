@@ -16,13 +16,37 @@
 
 </div>
 
-## Key Features
+## Major Features
+```plaintext
+• Multi-Source Intelligence
+• Forensic Analysis
+• Privacy Protection
+• Multiple Output Formats
+• Enterprise Ready
+```
 
-- Multi-Source Intelligence
-- Forensic Analysis
-- Privacy Protection
-- Multiple Output Formats
-- Enterprise Ready
+## Project Structure
+
+```plaintext
+IPSherlock
+├── assets/
+│   └── ipsherlocklogo.png
+├── docs/
+│   ├── CHANGELOG.md
+│   ├── COMMANDS.md
+│   ├── CONTRIBUTING.md
+│   ├── DISCLAIMER.md
+│   └── PREREQUISITES.md
+├── sherlock/
+│   ├── ipsherlock.py
+│   ├── ipsherlockfunc.py
+│   ├── requirements.txt
+│   └── sherlockey.env
+├── .gitignore
+├── LICENSE
+├── README.md
+└── 1.5
+```
 
 ## Virtual Environment
 Windows
