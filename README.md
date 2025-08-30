@@ -40,6 +40,7 @@ IPSherlock
 ├── sherlock/
 │   ├── ipsherlock.py
 │   ├── ipsherlockfunc.py
+│   ├── ipsherlockgraphic.py
 │   ├── requirements.txt
 │   └── sherlockey.env
 ├── .gitignore
