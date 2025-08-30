@@ -3,7 +3,7 @@
 ## [1.0] Python
 - Python **3.8** or **higher**
 - Make sure **Python** is available in your **path**
-- Download **Python** from the **[official website](https://www.python.org)** or from your `device's store`
+- Download **Python** from the **[official website](https://www.python.org)** or from your **device's store***
 
 ## [2.0] Packages
 - You must have **pip** installed to manage **dependencies** and **modules**
