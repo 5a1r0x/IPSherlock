@@ -10,9 +10,10 @@
 
 <div align="center">
 
-[![Python Version](https://img.shields.io/badge/Python-3.8%2B-lightblue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![Interface](https://img.shields.io/badge/Interface-Terminal%20%7C%20CLI-darkblue.svg)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-4FC3F7?logo=python&logoColor=white)](https://www.python.org/)
+[![Version](https://img.shields.io/badge/Version-1.5-29B6F6?logo=github&logoColor=white)](https://github.com/5a1r0x/IPSherlock)
+[![License](https://img.shields.io/badge/License-MIT-1565C0?logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
+[![Interface](https://img.shields.io/badge/Interface-Terminal-0D47A1?logo=gnubash&logoColor=white)](https://github.com/5a1r0x/IPSherlock)
 
 </div>
 
