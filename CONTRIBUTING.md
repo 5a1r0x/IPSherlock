@@ -5,7 +5,7 @@
 1. **Reporting Issues**
    - Check if the issue already exists
    - Provide detailed reproduction steps
-   - Include error messages and screenshots if possible
+   - Include error messages and PoC if possible
 
 2. **Feature Requests**
    - Explain the proposed feature
