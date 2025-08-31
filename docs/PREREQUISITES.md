@@ -8,14 +8,19 @@
 ## [2.0] Packages
 - You must have **pip** installed to manage **dependencies** and **modules**
 - Use the **requirements.txt** file to **view** and **install** the **necessary modules**
-- **Check** installed **modules** with the command **pip list**
+- **Check** installed **modules** with the command **'pip list'**
 
 ## [3.0] Environment
 - It is **recommended** to **activate** and **use** a **virtual environment** to avoid errors or problems
 - If there are any **configuration errors** it is **recommended** to **change** the **environment** name or **reboot** the **system**
-- If there are any **problems** with the **virtual environment** it is **recommended** to deactivate it with the command **deactivate**
+- If there are any **problems** with the **virtual environment** it is **recommended** to deactivate it with the command **'deactivate'**
 
 ## [4.0] Knowledge
 - A **minimum** knowledge of **terminal** functionality is **recommended**
 - Basic **networking** knowledge especially for **IP Addresses**
 - Know how to **navigate** **folders** and **files** in the **operating system**
+
+## [5.0] API
+- To view **information** from **private APIs** you need to have **API key** from the respective **websites**
+- Services that **require** an API key are **securely** stored in the **'sherlockey.env'** file
+- If you encounter any **configuration errors** it is **recommendend** to **check** the key **value** and the **service** name
