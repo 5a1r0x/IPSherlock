@@ -19,7 +19,7 @@
 ## [4.0] Pull Request Requirements
 - **Reference** related **issues**
 - **Include** description of **changes**
-- **Pass** all existing** tests**
+- **Pass** all existing **tests**
 - **Add** new tests for new **features**
 
 ## [5.0] Code of Conduct
